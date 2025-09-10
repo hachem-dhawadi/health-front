@@ -1,0 +1,36 @@
+<div class="container mt-4">
+  <h2>Create Question</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="mb-3">
+      <label>Text</label>
+      <input type="text" formControlName="text" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>Category</label>
+      <select formControlName="category" class="form-control">
+        <option value="personal">Personal</option>
+        <option value="nutrition">Nutrition</option>
+        <option value="lifestyle">Lifestyle</option>
+        <option value="stress">Stress</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label>Type</label>
+      <select formControlName="type" class="form-control">
+        <option value="text">Text</option>
+        <option value="radio">Radio</option>
+        <option value="checkbox">Checkbox</option>
+        <option value="number">Number</option>
+      </select>
+    </div>
+    <div formArrayName="choices" class="mb-3">
+      <label>Choices</label>
+      <div *ngFor="let choice of choices.controls; let i=index" class="input-group mb-2">
+        <input type="text" [formControlName]="i" class="form-control">
+        <button type="button" class="btn btn-danger" (click)="removeChoice(i)">Remove</button>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="addChoice()">Add Choice</button>
+    </div>
+    <button class="btn btn-success" type="submit">Submit</button>
+  </form>
+</div>

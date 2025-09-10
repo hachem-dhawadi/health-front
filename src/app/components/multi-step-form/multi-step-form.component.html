@@ -1,0 +1,59 @@
+<div class="container mt-5">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <!-- Step 1: Personal info -->
+    <div *ngIf="step === 1">
+      <input formControlName="name" placeholder="Geben Sie Ihren Namen ein" class="form-control mb-2"/>
+      <div *ngIf="name?.touched && name?.invalid" class="text-danger">Bitte Name eingeben</div>
+
+      <select formControlName="sexe" class="form-control mb-2">
+        <option value="">Wählen Sie Ihr Geschlecht</option>
+        <option value="male">Männlich</option>
+        <option value="female">Weiblich</option>
+      </select>
+      <div *ngIf="sexe?.touched && sexe?.invalid" class="text-danger">Bitte Geschlecht wählen</div>
+
+      <input type="number" formControlName="age" placeholder="Alter" class="form-control mb-2"/>
+      <div *ngIf="age?.touched && age?.invalid" class="text-danger">Bitte gültiges Alter eingeben</div>
+
+      <input type="number" formControlName="length" placeholder="Größe (cm)" class="form-control mb-2"/>
+      <div *ngIf="length?.touched && length?.invalid" class="text-danger">Bitte Größe eingeben</div>
+
+      <input type="number" formControlName="weight" placeholder="Gewicht (kg)" class="form-control mb-2"/>
+      <div *ngIf="weight?.touched && weight?.invalid" class="text-danger">Bitte Gewicht eingeben</div>
+
+      <button type="button" class="btn btn-primary" (click)="nextStep()">Weiter</button>
+    </div>
+
+    <!-- Step 2: Questions -->
+    <div *ngIf="step === 2">
+      <div *ngFor="let q of questions" class="mb-3">
+        <label>{{ q.text }}</label>
+
+        <div *ngIf="q.type === 'radio'">
+          <div *ngFor="let c of q.choices">
+            <input type="radio" [value]="c" formControlName="{{q._id}}" /> {{c}}
+          </div>
+        </div>
+
+        <div *ngIf="q.type === 'checkbox'">
+          <div *ngFor="let c of q.choices">
+            <input type="checkbox" [value]="c" (change)="onCheckboxChange($event, q._id)" /> {{c}}
+          </div>
+        </div>
+
+        <div *ngIf="q.type === 'text'">
+          <input type="text" formControlName="{{q._id}}" class="form-control"/>
+        </div>
+
+        <div *ngIf="q.type === 'number'">
+          <input type="number" formControlName="{{q._id}}" class="form-control"/>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-secondary me-2" (click)="prevStep()">Zurück</button>
+      <button type="submit" class="btn btn-success">Absenden</button>
+    </div>
+
+  </form>
+</div>

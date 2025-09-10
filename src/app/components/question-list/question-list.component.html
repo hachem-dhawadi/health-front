@@ -1,0 +1,61 @@
+<div class="container mt-4">
+  <h2>Questions List</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Text</th>
+        <th>Category</th>
+        <th>Type</th>
+        <th>Choices</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let q of questions">
+        <td>{{ q.text }}</td>
+        <td>{{ q.category }}</td>
+        <td>{{ q.type }}</td>
+        <td>{{ q.choices.join(', ') }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm me-1" (click)="editQuestion(q)">Edit</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteQuestion(q._id)">Delete</button>
+        </td>
+      </tr>
+
+      <!-- Editing Row -->
+      <tr *ngIf="editingQuestion">
+        <td><input [(ngModel)]="editingQuestion.text" class="form-control"></td>
+        <td>
+          <select [(ngModel)]="editingQuestion.category" class="form-control">
+            <option value="personal">Personal</option>
+            <option value="nutrition">Nutrition</option>
+            <option value="lifestyle">Lifestyle</option>
+            <option value="stress">Stress</option>
+          </select>
+        </td>
+        <td>
+          <select [(ngModel)]="editingQuestion.type" class="form-control">
+            <option value="text">Text</option>
+            <option value="radio">Radio</option>
+            <option value="checkbox">Checkbox</option>
+            <option value="number">Number</option>
+          </select>
+        </td>
+        <td>
+          <!-- Dynamic checkboxes -->
+          <div *ngFor="let choice of editingQuestion.choices">
+            <input type="checkbox" [value]="choice.text" [(ngModel)]="choice.checked"> {{ choice.text }}
+          </div>
+
+          <!-- Input to edit choices -->
+          <input [(ngModel)]="choicesInput" class="form-control mt-2" placeholder="Comma separated options" (change)="updateChoices()">
+          <small class="text-muted">Comma separated for multiple choices</small>
+        </td>
+        <td>
+          <button class="btn btn-success btn-sm me-1" (click)="saveQuestion()">Save</button>
+          <button class="btn btn-secondary btn-sm" (click)="cancelEdit()">Cancel</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
