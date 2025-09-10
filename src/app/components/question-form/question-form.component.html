@@ -5,15 +5,15 @@
       <label>Text</label>
       <input type="text" formControlName="text" class="form-control">
     </div>
-    <div class="mb-3">
-      <label>Category</label>
-      <select formControlName="category" class="form-control">
-        <option value="personal">Personal</option>
-        <option value="nutrition">Nutrition</option>
-        <option value="lifestyle">Lifestyle</option>
-        <option value="stress">Stress</option>
-      </select>
-    </div>
+<div class="mb-3">
+  <label>Category</label>
+  <select formControlName="category" class="form-control">
+    <option *ngFor="let cat of categories" [value]="cat.value">
+      {{ cat.label }}
+    </option>
+  </select>
+</div>
+
     <div class="mb-3">
       <label>Type</label>
       <select formControlName="type" class="form-control">

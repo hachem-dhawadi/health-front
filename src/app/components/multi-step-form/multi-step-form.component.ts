@@ -13,60 +13,77 @@ export class MultiStepFormComponent implements OnInit {
   form!: FormGroup;
   questions: any[] = [];
 
+  currentQuestionIndex = 0;  // for pagination
+  questionsPerPage = 4;
+
+  
+
   constructor(private fb: FormBuilder, private api: ApiService) {}
 
-ngOnInit(): void {
-  // Personal info form
-  this.form = this.fb.group({
-    name: ['', Validators.required],
-    sexe: ['', Validators.required],
-    age: ['', [Validators.required, Validators.min(0)]],
-    length: ['', [Validators.required, Validators.min(0)]],
-    weight: ['', [Validators.required, Validators.min(0)]]
-  });
-
-  // FETCH questions from backend
-  this.api.getAllQuestions().subscribe((questions: any[]) => {
-    this.questions = questions;
-
-    // Add dynamic form controls for each question
-    this.questions.forEach(q => {
-      if (q.type === 'checkbox') {
-        this.form.addControl(q._id, this.fb.array([], Validators.required));
-      } else {
-        this.form.addControl(q._id, this.fb.control('', Validators.required));
-      }
+  ngOnInit(): void {
+    // Personal info form
+    this.form = this.fb.group({
+      name: ['', Validators.required],
+      sexe: ['', Validators.required],
+      age: ['', [Validators.required, Validators.min(0)]],
+      length: ['', [Validators.required, Validators.min(0)]],
+      weight: ['', [Validators.required, Validators.min(0)]]
     });
-  });
-}
 
+    // FETCH questions from backend
+    this.api.getAllQuestions().subscribe((questions: any[]) => {
+      this.questions = questions;
+
+      // Add dynamic form controls for each question
+      this.questions.forEach(q => {
+        if (q.type === 'checkbox') {
+          this.form.addControl(q._id, this.fb.array([], Validators.required));
+        } else {
+          this.form.addControl(q._id, this.fb.control('', Validators.required));
+        }
+      });
+    });
+  }
 
   // Step navigation
- nextStep() {
-  if (this.step === 1) {
-    const personalInfoValid =
-      this.name?.valid &&
-      this.sexe?.valid &&
-      this.age?.valid &&
-      this.length?.valid &&
-      this.weight?.valid;
+  nextStep() {
+    if (this.step === 1) {
+      const personalInfoValid =
+        this.name?.valid &&
+        this.sexe?.valid &&
+        this.age?.valid &&
+        this.length?.valid &&
+        this.weight?.valid;
 
-    if (!personalInfoValid) {
-      this.name?.markAsTouched();
-      this.sexe?.markAsTouched();
-      this.age?.markAsTouched();
-      this.length?.markAsTouched();
-      this.weight?.markAsTouched();
-      return;
+      if (!personalInfoValid) {
+        this.name?.markAsTouched();
+        this.sexe?.markAsTouched();
+        this.age?.markAsTouched();
+        this.length?.markAsTouched();
+        this.weight?.markAsTouched();
+        return;
+      }
+    }
+    this.step++;
+  }
+
+  prevStep() { this.step--; }
+
+  // Pagination for questions
+  get pagedQuestions() {
+    return this.questions.slice(this.currentQuestionIndex, this.currentQuestionIndex + this.questionsPerPage);
+  }
+
+  nextQuestions() {
+    if (this.currentQuestionIndex + this.questionsPerPage < this.questions.length) {
+      this.currentQuestionIndex += this.questionsPerPage;
     }
   }
 
-  this.step++;
-}
-
-
-  prevStep() {
-    this.step--;
+  prevQuestions() {
+    if (this.currentQuestionIndex - this.questionsPerPage >= 0) {
+      this.currentQuestionIndex -= this.questionsPerPage;
+    }
   }
 
   // Checkbox handler
@@ -108,6 +125,47 @@ ngOnInit(): void {
       }
     });
   }
+  // Map category codes to English
+getCategoryName(category: string): string {
+  const map: any = {
+    personal: 'Personal',
+    nutrition: 'Nutrition',
+    hydration: 'Hydration',
+    sleep: 'Sleep',
+    exercise: 'Exercise',
+    stress: 'Stress',
+    smoking: 'Smoking',
+    alcohol: 'Alcohol'
+  };
+  return map[category] || category;
+}
+
+// Map category codes to German
+getCategoryNameGerman(category: string): string {
+  const map: any = {
+    personal: 'Persönlich',
+    nutrition: 'Ernährung',
+    hydration: 'Flüssigkeitszufuhr',
+    sleep: 'Schlaf',
+    exercise: 'Bewegung',
+    stress: 'Stress',
+    smoking: 'Rauchen',
+    alcohol: 'Alkohol'
+  };
+  return map[category] || category;
+}
+
+// Optional: return question number globally
+getCategoryNumber(index: number): number {
+  return index + 1 + this.currentQuestionIndex; // add current page offset
+}
+
+
+  // Returns true if we are on the last page of questions
+isLastPage(): boolean {
+  return this.currentQuestionIndex + this.questionsPerPage >= this.questions.length;
+}
+
 
   // Helpers for template validation
   get name() { return this.form.get('name'); }
@@ -116,3 +174,5 @@ ngOnInit(): void {
   get length() { return this.form.get('length'); }
   get weight() { return this.form.get('weight'); }
 }
+
+

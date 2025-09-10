@@ -29,8 +29,13 @@
           <select [(ngModel)]="editingQuestion.category" class="form-control">
             <option value="personal">Personal</option>
             <option value="nutrition">Nutrition</option>
-            <option value="lifestyle">Lifestyle</option>
-            <option value="stress">Stress</option>
+            <option value="hydration">hydration</option>
+            <option value="sleep">sleep</option>
+            <option value="exercise">exercise</option>
+            <option value="stress">stress</option>
+            <option value="smoking">smoking</option>
+            <option value="alcohol">alcohol</option>
+
           </select>
         </td>
         <td>
@@ -48,7 +53,8 @@
           </div>
 
           <!-- Input to edit choices -->
-          <input [(ngModel)]="choicesInput" class="form-control mt-2" placeholder="Comma separated options" (change)="updateChoices()">
+          <input [(ngModel)]="choicesInput" class="form-control mt-2" placeholder="Comma separated options"
+            (change)="updateChoices()">
           <small class="text-muted">Comma separated for multiple choices</small>
         </td>
         <td>

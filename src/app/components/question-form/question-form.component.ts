@@ -10,6 +10,18 @@ import { ApiService } from '../../services/api.service';
 export class QuestionFormComponent {
   form: FormGroup;
 
+  categories = [
+  { value: 'personal', label: 'Personal' },
+  { value: 'nutrition', label: 'Nutrition' },
+  { value: 'hydration', label: 'Hydration' },
+  { value: 'sleep', label: 'Sleep' },
+  { value: 'exercise', label: 'Exercise' },
+  { value: 'stress', label: 'Stress' },
+  { value: 'smoking', label: 'Smoking' },
+  { value: 'alcohol', label: 'Alcohol' },
+];
+
+
   constructor(private fb: FormBuilder, private api: ApiService) {
     this.form = this.fb.group({
       text: ['', Validators.required],

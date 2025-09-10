@@ -7,29 +7,38 @@
       <div *ngIf="name?.touched && name?.invalid" class="text-danger">Bitte Name eingeben</div>
 
       <select formControlName="sexe" class="form-control mb-2">
-        <option value="">Wählen Sie Ihr Geschlecht</option>
+        <option value="">Geben Sie Ihr Geschlecht ein</option>
         <option value="male">Männlich</option>
         <option value="female">Weiblich</option>
       </select>
       <div *ngIf="sexe?.touched && sexe?.invalid" class="text-danger">Bitte Geschlecht wählen</div>
 
-      <input type="number" formControlName="age" placeholder="Alter" class="form-control mb-2"/>
+      <input type="number" formControlName="age" placeholder="Geben Sie Ihr Alter" class="form-control mb-2"/>
       <div *ngIf="age?.touched && age?.invalid" class="text-danger">Bitte gültiges Alter eingeben</div>
 
-      <input type="number" formControlName="length" placeholder="Größe (cm)" class="form-control mb-2"/>
+      <input type="number" formControlName="length" placeholder="Geben Sie Ihre Körpergröße ein" class="form-control mb-2"/>
       <div *ngIf="length?.touched && length?.invalid" class="text-danger">Bitte Größe eingeben</div>
 
-      <input type="number" formControlName="weight" placeholder="Gewicht (kg)" class="form-control mb-2"/>
+      <input type="number" formControlName="weight" placeholder="Geben Sie Ihr Gewicht ein" class="form-control mb-2"/>
       <div *ngIf="weight?.touched && weight?.invalid" class="text-danger">Bitte Gewicht eingeben</div>
 
       <button type="button" class="btn btn-primary" (click)="nextStep()">Weiter</button>
     </div>
 
-    <!-- Step 2: Questions -->
+    <!-- Step 2: Questions (paged) -->
     <div *ngIf="step === 2">
-      <div *ngFor="let q of questions" class="mb-3">
-        <label>{{ q.text }}</label>
+      <div *ngFor="let q of pagedQuestions; let i = index" class="mb-3">
+        
+        <!-- Category with number and German translation -->
+        <div class="fw-bold">
+          {{ currentQuestionIndex + i + 1 }} / {{ getCategoryNameGerman(q.category) }}
+          <br>
+        </div>
 
+        <!-- Question text -->
+        <div class="mb-1">{{ q.text }}</div>
+
+        <!-- Choices -->
         <div *ngIf="q.type === 'radio'">
           <div *ngFor="let c of q.choices">
             <input type="radio" [value]="c" formControlName="{{q._id}}" /> {{c}}
@@ -51,8 +60,21 @@
         </div>
       </div>
 
-      <button type="button" class="btn btn-secondary me-2" (click)="prevStep()">Zurück</button>
-      <button type="submit" class="btn btn-success">Absenden</button>
+      <!-- Pagination buttons -->
+      <div class="mb-3">
+        <button type="button" class="btn btn-secondary me-2" (click)="prevQuestions()" [disabled]="currentQuestionIndex===0">
+          Vorherige Fragen
+        </button>
+        <button type="button" class="btn btn-primary" (click)="nextQuestions()" [disabled]="isLastPage()">
+          Nächste Fragen
+        </button>
+      </div>
+
+      <!-- Only show Submit/Back on last page of questions -->
+      <div *ngIf="isLastPage()">
+        <button type="submit" class="btn btn-success mt-2">Absenden</button>
+        <button type="button" class="btn btn-secondary mt-2" (click)="prevStep()">Zurück</button>
+      </div>
     </div>
 
   </form>
