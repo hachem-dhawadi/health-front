@@ -1,67 +1,149 @@
-<div class="container mt-4">
-  <h2>Questions List</h2>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Text</th>
-        <th>Category</th>
-        <th>Type</th>
-        <th>Choices</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let q of questions">
-        <td>{{ q.text }}</td>
-        <td>{{ q.category }}</td>
-        <td>{{ q.type }}</td>
-        <td>{{ q.choices.join(', ') }}</td>
-        <td>
-          <button class="btn btn-primary btn-sm me-1" (click)="editQuestion(q)">Edit</button>
-          <button class="btn btn-danger btn-sm" (click)="deleteQuestion(q._id)">Delete</button>
-        </td>
-      </tr>
+<div class="container mt-5">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">
+      <i class="bi bi-question-circle"></i> Questions Manager
+    </h2>
+    <button class="btn btn-success shadow-sm fw-bold" routerLink="/create-question">
+      <i class="bi bi-plus-circle me-2"></i> Add Question
+    </button>
+  </div>
 
-      <!-- Editing Row -->
-      <tr *ngIf="editingQuestion">
-        <td><input [(ngModel)]="editingQuestion.text" class="form-control"></td>
-        <td>
-          <select [(ngModel)]="editingQuestion.category" class="form-control">
-            <option value="personal">Personal</option>
-            <option value="nutrition">Nutrition</option>
-            <option value="hydration">hydration</option>
-            <option value="sleep">sleep</option>
-            <option value="exercise">exercise</option>
-            <option value="stress">stress</option>
-            <option value="smoking">smoking</option>
-            <option value="alcohol">alcohol</option>
+  <!-- Table Card -->
+  <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+    <div class="card-body p-0">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="text-white" style="background: linear-gradient(90deg, #0d6efd, #0dcaf0);">
+          <tr>
+            <th scope="col">Question</th>
+            <th scope="col">Category</th>
+            <th scope="col">Type</th>
+            <th scope="col">Choices</th>
+            <th scope="col" class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let q of questions" class="table-row">
+            <td class="fw-semibold">{{ q?.text }}</td>
+            <td>
+              <span class="choice-tag">{{ q?.category }}</span>
+            </td>
+            <td>
+              <span class="choice-tag">{{ q?.type }}</span>
+            </td>
+            <td>
+              <span *ngFor="let c of q?.choices" class="choice-tag">{{ c }}</span>
+            </td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center gap-2">
+                <button class="btn btn-outline-primary action-btn" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#updateModal" 
+                        (click)="editQuestion(q)" 
+                        title="Edit Question">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn btn-outline-danger action-btn" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#deleteModal" 
+                        (click)="setDeleteTarget(q)" 
+                        title="Delete Question">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-          </select>
-        </td>
-        <td>
-          <select [(ngModel)]="editingQuestion.type" class="form-control">
-            <option value="text">Text</option>
-            <option value="radio">Radio</option>
-            <option value="checkbox">Checkbox</option>
-            <option value="number">Number</option>
-          </select>
-        </td>
-        <td>
-          <!-- Dynamic checkboxes -->
-          <div *ngFor="let choice of editingQuestion.choices">
-            <input type="checkbox" [value]="choice.text" [(ngModel)]="choice.checked"> {{ choice.text }}
+
+
+<!-- ================= UPDATE MODAL ================= -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Update Question</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form *ngIf="editingQuestion">
+          <div class="mb-3">
+            <label class="form-label">Question Text</label>
+            <input [(ngModel)]="editingQuestion.text" name="text" class="form-control">
           </div>
 
-          <!-- Input to edit choices -->
-          <input [(ngModel)]="choicesInput" class="form-control mt-2" placeholder="Comma separated options"
-            (change)="updateChoices()">
-          <small class="text-muted">Comma separated for multiple choices</small>
-        </td>
-        <td>
-          <button class="btn btn-success btn-sm me-1" (click)="saveQuestion()">Save</button>
-          <button class="btn btn-secondary btn-sm" (click)="cancelEdit()">Cancel</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <div class="mb-3">
+            <label class="form-label">Category</label>
+            <select [(ngModel)]="editingQuestion.category" name="category" class="form-select">
+              <option value="personal">Personal</option>
+              <option value="nutrition">Nutrition</option>
+              <option value="hydration">Hydration</option>
+              <option value="sleep">Sleep</option>
+              <option value="exercise">Exercise</option>
+              <option value="stress">Stress</option>
+              <option value="smoking">Smoking</option>
+              <option value="alcohol">Alcohol</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Type</label>
+            <select [(ngModel)]="editingQuestion.type" name="type" class="form-select">
+              <option value="text">Text</option>
+              <option value="radio">Radio</option>
+              <option value="checkbox">Checkbox</option>
+              <option value="number">Number</option>
+            </select>
+          </div>
+
+          <div class="mb-3" *ngIf="editingQuestion?.choices">
+            <label class="form-label">Choices</label>
+            <div *ngFor="let choice of editingQuestion.choices; let i = index" class="form-check">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="choice.checked" [value]="choice.text"
+                name="choice{{i}}">
+              <label class="form-check-label">{{ choice.text }}</label>
+            </div>
+            <input [(ngModel)]="choicesInput" name="choicesInput" class="form-control mt-2"
+              placeholder="Comma separated options" (change)="updateChoices()">
+            <small class="text-muted">Comma separated for multiple choices</small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="saveQuestion()" data-bs-dismiss="modal">
+          <i class="bi bi-check-circle"></i> Save
+        </button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle"></i> Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= DELETE CONFIRM MODAL ================= -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title"><i class="bi bi-exclamation-triangle"></i> Confirm Delete</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Are you sure you want to delete <strong>{{ deleteTarget?.text }}</strong>?</p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button class="btn btn-danger" (click)="deleteQuestion(deleteTarget?._id)" data-bs-dismiss="modal">
+          <i class="bi bi-trash"></i> Delete
+        </button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

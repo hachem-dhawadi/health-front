@@ -35,20 +35,29 @@ export class QuestionFormComponent {
     return this.form.get('choices') as FormArray;
   }
 
-  addChoice() {
-    this.choices.push(this.fb.control(''));
-  }
+addChoice() {
+  this.choices.push(this.fb.control('', Validators.required));
+}
 
-  removeChoice(index: number) {
+removeChoice(index: number) {
+  if (this.choices.length > 1) {
     this.choices.removeAt(index);
   }
+}
 
-  submit() {
-    this.api.createQuestion(this.form.value).subscribe(res => {
-      alert('Question created!');
-      this.form.reset();
-      this.choices.clear();
-      this.choices.push(this.fb.control(''));
-    });
+submit() {
+  if (this.form.invalid) {
+    this.form.markAllAsTouched(); // Show validation errors
+    return;
   }
+
+  this.api.createQuestion(this.form.value).subscribe(res => {
+    alert('Question created!');
+    this.form.reset();
+    this.choices.clear();
+    this.choices.push(this.fb.control('', Validators.required));
+  });
+}
+
+  
 }

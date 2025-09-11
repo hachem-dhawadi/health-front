@@ -9,6 +9,7 @@ import { QuestionListComponent } from './components/question-list/question-list.
 import { QuestionFormComponent } from './components/question-form/question-form.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { MultiStepFormComponent } from './components/multi-step-form/multi-step-form.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 @NgModule({
@@ -27,7 +28,9 @@ import { MultiStepFormComponent } from './components/multi-step-form/multi-step-
      ReactiveFormsModule,  // add this
      FormsModule
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

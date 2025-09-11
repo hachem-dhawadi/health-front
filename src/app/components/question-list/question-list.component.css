@@ -1,0 +1,105 @@
+/* General button improvements */
+.btn {
+  transition: all 0.2s ease-in-out;
+  font-weight: 500;
+}
+
+/* Add Question button */
+.btn-success {
+  background: linear-gradient(135deg, #28a745, #218838);
+  border: none;
+}
+.btn-success:hover {
+  background: linear-gradient(135deg, #34ce57, #1e7e34);
+  transform: scale(1.05);
+}
+
+/* Action buttons in table */
+.action-btn {
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+.btn-outline-primary {
+  border: 1px solid #0d6efd;
+  color: #0d6efd;
+}
+.btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+.btn-outline-danger {
+  border: 1px solid #dc3545;
+  color: #dc3545;
+}
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+}
+/* Smooth hover effect */
+.table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Add spacing and borderless clean look */
+.table td, .table th {
+  padding: 1rem;
+  vertical-align: middle;
+  border-color: #dee2e6;
+}
+
+/* Card shadow glow on hover */
+.card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-in-out;
+}
+/* Table Row Hover Effect */
+.table-hover tbody tr:hover {
+  background-color: #f1f5f9;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+/* Card Hover Effect */
+.card:hover {
+  transform: translateY(-3px);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Rounded Pill Badges */
+.badge {
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+/* Buttons Styling */
+.btn-outline-primary {
+  transition: all 0.2s ease-in-out;
+}
+.btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.btn-outline-danger {
+  transition: all 0.2s ease-in-out;
+}
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Shadow for Action Buttons */
+.btn-sm {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Header Styling */
+h2 i {
+  font-size: 1.4rem;
+}

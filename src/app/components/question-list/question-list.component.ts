@@ -12,14 +12,29 @@ export class QuestionListComponent implements OnInit {
   choicesInput: string = '';
 
   constructor(private api: ApiService) {}
+  deleteTarget: any = null;
+
+setDeleteTarget(q: any) {
+  this.deleteTarget = q;
+}
+
 
   ngOnInit(): void {
     this.loadQuestions();
   }
 
-  loadQuestions() {
-    this.api.getAllQuestions().subscribe(res => this.questions = res);
-  }
+loadQuestions() {
+  this.api.getAllQuestions().subscribe({
+    next: (res) => {
+      console.log("Questions fetched:", res);
+      this.questions = res;
+    },
+    error: (err) => {
+      console.error("Error fetching questions:", err);
+    }
+  });
+}
+
 
   deleteQuestion(id: string) {
     if (confirm('Are you sure?')) {

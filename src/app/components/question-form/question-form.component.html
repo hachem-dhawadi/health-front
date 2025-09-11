@@ -1,36 +1,61 @@
-<div class="container mt-4">
-  <h2>Create Question</h2>
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <div class="mb-3">
-      <label>Text</label>
-      <input type="text" formControlName="text" class="form-control">
-    </div>
-<div class="mb-3">
-  <label>Category</label>
-  <select formControlName="category" class="form-control">
-    <option *ngFor="let cat of categories" [value]="cat.value">
-      {{ cat.label }}
-    </option>
-  </select>
-</div>
+<div class="container mt-5">
+  <h2 class="fw-bold text-primary mb-4"><i class="bi bi-plus-circle"></i> Create Question</h2>
 
+  <form [formGroup]="form" (ngSubmit)="submit()" class="needs-validation">
+
+    <!-- Question Text -->
     <div class="mb-3">
-      <label>Type</label>
-      <select formControlName="type" class="form-control">
+      <label class="form-label fw-semibold">Question Text</label>
+      <input type="text" formControlName="text" class="form-control"
+             [ngClass]="{'is-invalid': form.get('text')?.invalid && form.get('text')?.touched}">
+      <div class="invalid-feedback">Question text is required.</div>
+    </div>
+
+    <!-- Category -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Category</label>
+      <select formControlName="category" class="form-select"
+              [ngClass]="{'is-invalid': form.get('category')?.invalid && form.get('category')?.touched}">
+        <option value="">Select Category</option>
+        <option *ngFor="let cat of categories" [value]="cat.value">{{ cat.label }}</option>
+      </select>
+      <div class="invalid-feedback">Category is required.</div>
+    </div>
+
+    <!-- Type -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Type</label>
+      <select formControlName="type" class="form-select"
+              [ngClass]="{'is-invalid': form.get('type')?.invalid && form.get('type')?.touched}">
+        <option value="">Select Type</option>
         <option value="text">Text</option>
         <option value="radio">Radio</option>
         <option value="checkbox">Checkbox</option>
         <option value="number">Number</option>
       </select>
+      <div class="invalid-feedback">Type is required.</div>
     </div>
+
+    <!-- Choices -->
     <div formArrayName="choices" class="mb-3">
-      <label>Choices</label>
+      <label class="form-label fw-semibold">Choices</label>
       <div *ngFor="let choice of choices.controls; let i=index" class="input-group mb-2">
-        <input type="text" [formControlName]="i" class="form-control">
-        <button type="button" class="btn btn-danger" (click)="removeChoice(i)">Remove</button>
+        <input type="text" [formControlName]="i" placeholder="Enter choice"
+               class="form-control"
+               [ngClass]="{'is-invalid': choice.invalid && choice.touched}">
+        <button type="button" class="btn btn-danger btn-sm" (click)="removeChoice(i)">
+          <i class="bi bi-trash"></i> Remove
+        </button>
+        <div class="invalid-feedback">Choice cannot be empty.</div>
       </div>
-      <button type="button" class="btn btn-primary" (click)="addChoice()">Add Choice</button>
+      <button type="button" class="btn btn-primary btn-sm mt-1" (click)="addChoice()">
+        <i class="bi bi-plus-circle"></i> Add Choice
+      </button>
     </div>
-    <button class="btn btn-success" type="submit">Submit</button>
+
+    <!-- Submit -->
+    <button type="submit" class="btn btn-success fw-bold mt-3" [disabled]="form.invalid">
+      <i class="bi bi-check-circle me-1"></i> Submit
+    </button>
   </form>
 </div>
